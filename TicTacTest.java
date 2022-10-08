@@ -15,8 +15,10 @@ public class TicTacTest implements ActionListener{
 	JFrame frameObj = new JFrame();
 	JPanel title = new JPanel();
 	JPanel button = new JPanel();
+	JPanel Button = new JPanel();
 	JLabel txt = new JLabel();
 	JButton[] btn = new JButton[81];
+	JButton[] Btn = new JButton[9];
 	boolean Playerturn = true;
 	
 	
@@ -36,35 +38,43 @@ public class TicTacTest implements ActionListener{
 		title.setBounds(0, 0, 800, 100);
 		
 		button.setLayout(new GridLayout(9,9));
+		button.setLayout(new GridLayout(3,3));
 		button.setBackground(Color.gray);
 		
 		for(int i = 0;i<81;i++ ) {
 			btn[i] = new JButton();
 			button.add(btn[i]);
 			btn[i].setFont(new Font("MV Boli",Font.BOLD,70));
+			if(i%3==0 || i%3==1 || i%3==2){
+				btn[i].setBackground(Color.LIGHT_GRAY);
+			}else {
+				btn[i].setBackground(Color.gray);
+			}
 			btn[i].setFocusable(false);
 			btn[i].addActionListener(this);
+		}
+		for(int i = 0;i<9;i++ ) {
+			Btn[i] = new JButton();
+			Button.add(Btn[i]);
+			Btn[i].setFont(new Font("MV Boli",Font.BOLD,140));
+			if(i%2==0){
+				btn[i].setBackground(Color.LIGHT_GRAY);
+			}else {
+				btn[i].setBackground(Color.gray);
+			}
+			Btn[i].setFocusable(false);
+			Btn[i].setEnabled(false);
 		}
 		
 		title.add(txt);
 		frameObj.add(title,BorderLayout.NORTH);
 		frameObj.add(button);
+		frameObj.add(Button);
 		
-//		firstplay();
 	}
 	public  void ActionListener(ActionEvent e) {
 		
 	}
-//	public void firstplay() {
-//		if (cnt == 1) {
-//			Playerturn = true;
-//			txt.setText("X Turn");
-//		}
-//		else {
-//			Playerturn = false;
-//			txt.setText("O Turn");
-//		}
-//	}
 	
 	public static String  positionGrid (int i) {
 		int x = i % 3;
