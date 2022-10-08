@@ -15,29 +15,74 @@ public class ProjectFunctions{
 							 {x7,x8,x9}}; // creates 3x3 array of grid objects			
 
         boolean across = false , diagonal = false, pending = true;
-		int counter  = 0; // counter that checks if 1 (X) or -1 (O) needs to be entered
-		int popX  , popY ; // population co ordinates
-		int nextX , nextY ; // next grid coordinates
+		int btnum = 0 ,cnt = 1; // stores button number from 0 to 80 (inclusive)
+		
         int [][] StateGrid = new int [3][3]; // Records The State Of Each Object;
-		for (int i = 0 ; i < 3 ; i++){
-			for (int j = 0 ; j < 3 ; j++){
-			StateGrid[i][j] = x[i][j].getState();
-		    }
+		popStateGrid(x , StateGrid); // records the state of each object into the stategrid array
+		
 		}
 		
-		
 		while (pending == true) {
-			// insert code to retreive button number as btnum	
-            counter = counter + 1;	
-            int play = player(counter);	// gives 1 or -1 X or O
+			int holder [][] = new int [3][3];// to temporarily hold the array being looked at
+			// insert code for botton number and store as btnum	
+		    int arrPop [] = new int [2];
+			arrPop = popGrid(btnum);
+			int x_cor , y_cor ;
+			x_cor = arrPop[0]; //x coordinate of population grid
+			y_cor = arrPop[1]; // y coordinate of population grid
+			holder = x[x_cor][y_cor].getGrid();
 			
-                        			
+			
+			while (!(Unused(btnum , holder))){ // While you pick a used button in the allowed grid
+				// Print out message about the button someone having already played
+				// repeat code for getting button number 
+				arrPop = popGrid(btnum);
+				x_cor = arrPop[0]; 
+				y_cor = arrPop[1];
+				holder = x[x_cor][y_cor].getGrid();		 
+			}
+			
+			Populate(holder , btnum , cnt); // populates the holder grid
+			x[x_cor][y_cor].setGrid(holder); // changes the object grid
+			
+			
 		}
 		
 		
 			
 							 
 	}
+	
+	public static void Populate(int [][] h , int num , int cnt ){ // populates the grid being worked on
+		int x = nextGrid(num)[0];
+		int y = nextGrid(num)[1];	
+		if (cnt % 2 == 1){ // if "X" is playing
+			h[x][y] = 1;
+		}else{
+			h[x][y] = -1;
+		}
+	}
+	
+	
+	public static void popStateGrid(Game_Grid [][] x , int [][] s){
+		for (int i = 0 ; i < 3 ; i++){
+			for (int j = 0 ; j < 3 ; j++){
+			s[i][j] = x[i][j].getState();
+		    }
+	}
+	
+	
+	
+	
+	public static boolean Unused (int num , int [][] h){ // checks if button has been used
+		int x = nextGrid(num)[0];
+		int y = nextGrid(num)[1];
+		if (h[x][y] == 0){
+			return true;
+		}
+		return false;	
+	}
+	
 	
 	
 	
@@ -69,59 +114,19 @@ public class ProjectFunctions{
 		return false;
     }
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public static int [] nextGrid (int btnum){  // States which grid you must play in next
 	    int arr [] = new int [2];
 		int x = btnum % 3;
 		int y = (btnum / 9) % 3;
-		arr[0] = x;
-		arr[1] = y;
-		return arr;
+		return arr[x,y];
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	public static int [] popGrid (int btnum){ // States which grid you currently want to populate
 		 int arr [] = new int [2];
 		 int x = (btnum % 9) / 3;
 		 int y = btnum / 27;
-		 arr[0] = x;
-		 arr[1] = y;
-		 return arr;
+		 return arr[x,y];
 	}
-	
-	public static int player (int num){// returns the player number
-		if (num % 2 == 0){
-			return -1;
-		}
-		return 1;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 	public static boolean Check_Diagonal(int [][] arr){ //Checks diagonally from left to right
 		int cnt = 0 , cnt_2 = 0 , j  = 2;
@@ -140,14 +145,6 @@ public class ProjectFunctions{
 		}
 		return false;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
     public static Stale_Mate(int [][] s){    
         for (int i = 0 ; i < 3 ; i++ ){
